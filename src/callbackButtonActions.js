@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const utils = require("util");
 const message = require("./messages");
+const showPurchases = require('./instructions/showPurchases');
+const userService = require('./services/userService');
 
 const readFileAsync = utils.promisify(fs.readFile);
 
@@ -21,7 +23,7 @@ module.exports = bot => {
         instructionsTextFilePath = "herbalRecipe.md";
         break;
 
-      case message.enterMagnezia:
+      case message.enterMagneziaButton:
         instructionsTextFilePath = "enterMagnezia.md";
         break;
 
@@ -32,6 +34,11 @@ module.exports = bot => {
       case message.days7button:
       case message.days14button:
         daysAmountCallback(data);
+        break;
+
+      case message.conditionsButton:
+        userService.saveAgreement(id);
+        showPurchases(bot, id);
         break;
     }
 

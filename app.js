@@ -1,42 +1,56 @@
 const TelegramBot = require("node-telegram-bot-api");
-require('dotenv').config()
+const fs = require('fs');
+const path = require('path');
+const util = require('util');
+const userService = require('./src/services/userService');
 
-// replace the value below with the Telegram token you receive from @BotFather
-const token = process.env.TELEGRAM_API_KEY;
+require('dotenv').config();
 require('./src/db');
 
-// Create a bot that uses 'polling' to fetch new updates
+const token = process.env.TELEGRAM_API_KEY;
 const bot = new TelegramBot(token, { polling: true });
+const readDirAsync = util.promisify(fs.readdir);
 
-// STEPS
-const preparationStep = require('./src/steps/preparation/preparationStep');
-const actionsStep = require('./src/action/actions');
-const step1 = require('./src/steps/step1/daysAmountActions');
-const daysAmountCallback = require('./src/steps/step1/daysAmountCallback'); 
-const userService = require('./src/services/userService');
 const times = require('./src/services/time');
 
-const message = require("./src/messages.js");
+const steps = [];
+let dayTimer = 0;
 
+      
+readDirAsync(path.join(__dirname, 'src', 'steps'))
+  .then(files => {
+    files.forEach(file => {
+      steps.push(require(path.join(__dirname, 'src', 'steps', file)));
+    });
+  })
+  .catch(err => console.error('error in app.js', err));
 
 bot.onText(/\/start/, (msg, match) => {
   const chatId = msg.chat.id;
+
+  const intervalId = setInterval(() => {
+    if (dayTimer < steps.length) {
+      steps[dayTimer](bot, chatId).run();
+      dayTimer++
+    } else {
+      clearInterval(intervalId);
+    }
   
+  }, 2000)
+
   userService.save({
     first_name: msg.from.first_name,
     last_name: msg.from.last_name,
     username: msg.from.username,
     chat_id: msg.chat.id,
+    telegramId: msg.from.id,
   });
-
-  preparationStep(bot, chatId).run(); 
-
 });
 
-bot.onText(/\/actions/, (msg, match) => {
-    const chatId = msg.chat.id;
-    actionsStep(bot, chatId);
-})
+// bot.onText(/\/actions/, (msg, match) => {
+//     const chatId = msg.chat.id;
+//     actionsStep(bot, chatId);
+// })
 
 // Listen for any kind of message. There are different kinds of
 // messages.

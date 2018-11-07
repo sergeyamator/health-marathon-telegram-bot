@@ -19,18 +19,21 @@ module.exports = (bot, chatId) => ({
       return;
     }
 
-    bot.sendMessage(chatId, stepTextFile.toString());
-    bot.sendMessage(chatId, message.purchasesButton, {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: message.purchasesButton,
-                callback_data: message.purchasesButton
-              },
-            ]
+    await bot.sendMessage(chatId, stepTextFile.toString(), {
+      parse_mode: "Markdown"
+    });
+
+    bot.sendMessage(chatId, message.conditions, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: message.conditionsButton,
+              callback_data: message.conditionsButton
+            },
           ]
-        }
+        ]
+      }
     });
   }     
 })

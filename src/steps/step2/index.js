@@ -18,6 +18,8 @@ module.exports = (bot, chatId) => ({
         return;
     }
 
-    bot.sendMessage(chatId, stepTextFile.toString());
+    bot.sendMessage(chatId, stepTextFile.toString(), {
+      parse_mode: "Markdown"
+    });
   } 
 })

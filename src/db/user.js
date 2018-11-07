@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema({
     username: String,
     chat_id: String,
     option: Number,
+    agreement: Boolean,
+    day: Number,
+    telegramId: Number,
 });
 
 module.exports = mongoose.model('User', userSchema);
