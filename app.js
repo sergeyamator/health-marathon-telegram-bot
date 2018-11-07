@@ -28,15 +28,15 @@ readDirAsync(path.join(__dirname, 'src', 'steps'))
 bot.onText(/\/start/, (msg, match) => {
   const chatId = msg.chat.id;
 
-  const intervalId = setInterval(() => {
-    if (dayTimer < steps.length) {
-      steps[dayTimer](bot, chatId).run();
-      dayTimer++
-    } else {
-      clearInterval(intervalId);
-    }
+  // const intervalId = setInterval(() => {
+  //   if (dayTimer < steps.length) {
+  //     steps[dayTimer](bot, chatId).run();
+  //     dayTimer++
+  //   } else {
+  //     clearInterval(intervalId);
+  //   }
   
-  }, 2000)
+  // }, 2000)
 
   userService.save({
     first_name: msg.from.first_name,
@@ -44,7 +44,10 @@ bot.onText(/\/start/, (msg, match) => {
     username: msg.from.username,
     chat_id: msg.chat.id,
     telegramId: msg.from.id,
-  });
+    current_day: 0,
+  }).then(() => {
+    steps[0](bot, chatId).run();
+  })
 });
 
 // bot.onText(/\/actions/, (msg, match) => {

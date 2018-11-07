@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     chat_id: String,
     option: Number,
     agreement: Boolean,
-    day: Number,
+    current_day: Number,
     telegramId: Number,
 });
 
