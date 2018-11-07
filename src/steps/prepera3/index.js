@@ -1,16 +1,20 @@
 const message = require("./messages.js");
+const fs = require('fs');
+const path = require('path');
+const utils = require('util');
 
-module.exports = (bot, chatId) => {
-    const message = `
-Привет дорогой друг. Сегодня мы начинаем наш марафон. Что б очистка прошла максимально эффективно, нам с тобой следует провести подготовку.
-Первое твое задание - это отказаться на весь марафон от вредной пищи, а так же вредных зависимостей. Что сюда входит:
-- Алкоголь, сигареты, кофе и т.д.
-- Чипсы, сухарики, фастфуд, майонезы, кетчупы.
-- Колы, фанты, спрайты и т.д.
-- Так же отказываемся от жирной пищи, а так же жаренной пищи.
-- Уменьшаем порции приема пищи. Вы должны чувствовать легкий голод уходя из-за стола.
-- Пьем минимум 2 литра воды.
-- Последний прийом пищи делаем не позже чем за 3 часа до сна. Последний прием пищи - это легкая еда, идеально подходит салат, фрукты, свежевыжатый сок (на данном этапе можно с мякотью).
-    `
-    bot.sendMessage(chatId, message);
-}
+const readFileAsync = utils.promisify(fs.readFile);
+
+let stepTextFile;
+
+module.exports = (bot, chatId) => ({
+    async run() {
+        try {
+            stepTextFile = await readFileAsync(path.join(__dirname, 'step.md'));
+        } catch (e) {
+          console.error('Can not read file step.md', e);
+        }
+    
+        bot.sendMessage(chatId, stepTextFile.toString());
+    }
+})

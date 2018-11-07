@@ -9,7 +9,7 @@ require('./src/db');
 const bot = new TelegramBot(token, { polling: true });
 
 // STEPS
-const preparationStep = require('./src/preparationStep');
+const preparationStep = require('./src/steps/preparation/preparationStep');
 const actionsStep = require('./src/action/actions');
 const step1 = require('./src/steps/step1/daysAmountActions');
 const daysAmountCallback = require('./src/steps/step1/daysAmountCallback'); 
@@ -20,8 +20,6 @@ const message = require("./src/messages.js");
 
 
 bot.onText(/\/start/, (msg, match) => {
-  console.log(msg)
-  console.log(match)
   const chatId = msg.chat.id;
   
   userService.save({
@@ -31,13 +29,8 @@ bot.onText(/\/start/, (msg, match) => {
     chat_id: msg.chat.id,
   });
 
-  preparationStep(bot, chatId);
+  preparationStep(bot, chatId).run(); 
 
-  // First day
-  setTimeout()
-
-
-  // step1(bot, chatId)
 });
 
 bot.onText(/\/actions/, (msg, match) => {
@@ -54,30 +47,4 @@ bot.onText(/\/actions/, (msg, match) => {
 //   bot.sendMessage(chatId, 'Received your message');
 // });
 
-bot.on("callback_query", query => {
-  const { id } = query.message.chat;
-  const { data } = query;
-
-  switch (data) {
-    case message.purchasesButton:
-      bot.sendMessage(id, message.purchases, {parse_mode: 'Markdown'});
-      break;
-
-    case message.actions.herbalRecipe:
-      bot.sendMessage(id, message.herbalRecipe, {parse_mode: 'Markdown'});
-      break;
-
-    case message.enterMagnezia:
-      bot.sendMessage(id, message.enterMagnezia, {parse_mode: 'Markdown'});
-      break;
-
-    case message.enterKastorkaButton:
-      bot.sendMessage(id, message.enterKastorka, {parse_mode: 'Markdown'});
-      break;
-
-    case message.days7button:
-    case message.days14button:
-      daysAmountCallback(data);
-      break;
-    }
-});
+require('./src/callbackButtonActions')(bot)

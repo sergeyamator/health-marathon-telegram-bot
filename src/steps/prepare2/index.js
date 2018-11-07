@@ -1,13 +1,20 @@
 const message = require("./messages.js");
+const fs = require('fs');
+const path = require('path');
+const utils = require('util');
 
-module.exports = (bot, chatId) => {
-    const message = `
-Приветствую :) 
-Сегодня второй день нашего марафона. Сегодня мы продолжаем делать все что было во вчерашнем списке, а также продолжаем убирать вредную и тяжелую пищу:
-- Убираем продукты, содержимые крахмал, а так же мучные изделия (картофель, булки, макароны, белый рис)
-- Убираем все ненатуральные сладости (конфеты, печенье, шоколадки, мороженное, жувачки). Натуральный мед, любые фрукты, ягоды кушаем без проблем.
-- Вчера мы убрали из вечернего рациона тяжелую еду, сегодня убираем ее и из утреннего прийома. То есть утром мы кушаем каши (гречневая, перловая, льяная), либо салат, либо фрукты.
-- Самую трудную еду кушаем в промежуток 12 - 16 часов (Супы, мясо, гарниры и т.д.)
-    `
-    bot.sendMessage(chatId, message);
-}
+const readFileAsync = utils.promisify(fs.readFile);
+
+let stepTextFile;
+
+module.exports = async (bot, chatId) => ({
+    async run() {
+        try {
+            stepTextFile = await readFileAsync(path.join(__dirname, 'step.md'));
+        } catch (e) {
+          console.error('Can not read file step.md', e);
+        }
+    
+        bot.sendMessage(chatId, stepTextFile.toString());
+    }
+});
