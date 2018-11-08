@@ -5,14 +5,14 @@ const message = require("./messages");
 const showPurchases = require('./instructions/showPurchases');
 const userService = require('./services/userService');
 
-const { TIME_PERIOD } = require('./constants');
+const {TIME_PERIOD} = require('./constants');
 
 const readFileAsync = utils.promisify(fs.readFile);
 
 module.exports = bot => {
   bot.on("callback_query", async query => {
-    const { id } = query.message.chat;
-    const { data } = query;
+    const {id} = query.message.chat;
+    const {data} = query;
 
     let instructionsTextFilePath;
 

@@ -10,7 +10,7 @@ const readFileAsync = utils.promisify(fs.readFile);
 module.exports = (bot, chatId) => ({
   async run() {
     let stepTextFile;
-    
+
     try {
       stepTextFile = await readFileAsync(path.join(__dirname, 'step.md'));
     } catch (e) {
@@ -37,5 +37,5 @@ module.exports = (bot, chatId) => ({
         ]
       }
     });
-  }     
+  }
 })

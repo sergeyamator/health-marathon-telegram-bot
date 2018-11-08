@@ -16,7 +16,7 @@ module.exports = (bot, chatId) => ({
     }
 
     if (!stepTextFile) {
-        return;
+      return;
     }
 
     await bot.sendMessage(chatId, stepTextFile.toString(), {

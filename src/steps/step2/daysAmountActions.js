@@ -1,5 +1,5 @@
 const message = require("../../messages.js");
-const { TIME_PERIOD } = require('../../constants');
+const {TIME_PERIOD} = require('../../constants');
 
 module.exports = (bot, chatId) => {
   bot.sendMessage(chatId, "Какой срок условного голодания вы выбрали?", {
