@@ -19,7 +19,7 @@ module.exports = (bot, chatId) => ({
       parse_mode: "Markdown"
     });
 
-    bot.sendMessage(chatId, message.enterOptionText, {
+    await bot.sendMessage(chatId, message.enterOptionText, {
       reply_markup: {
         inline_keyboard: [
           [
@@ -34,6 +34,19 @@ module.exports = (bot, chatId) => ({
           ]
         ]
       }
-  });
+    });
+
+    await bot.sendMessage(chatId, message.klizmaButton, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: message.klizmaButton,
+              callback_data: message.klizmaButton
+            },
+          ]
+        ]
+      }
+    });
   }
 });

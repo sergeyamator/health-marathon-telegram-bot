@@ -9,8 +9,20 @@ module.exports = (bot, chatId) => {
                 text: message.actions.herbalRecipe,
                 callback_data: message.actions.herbalRecipe
               },
+            ],
+            [
+              {
+                text: message.klizmaButton,
+                callback_data: message.klizmaButton
+              },
+            ],
+            [
+              {
+                text: message.purchasesButton,
+                callback_data: message.purchasesButton
+              },
             ]
           ]
         }
     });
-}
+};

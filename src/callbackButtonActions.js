@@ -43,6 +43,9 @@ module.exports = bot => {
         userService.switchForNextDay(id);
         showPurchases(bot, id);
         break;
+
+      case message.klizmaButton:
+        instructionsTextFilePath = "klizma.md"
     }
 
     if (!instructionsTextFilePath) {

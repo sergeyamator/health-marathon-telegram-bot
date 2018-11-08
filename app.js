@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const userService = require('./src/services/userService');
+const actionsStep = require('./src/action/actions');
 
 require('dotenv').config();
 require('./src/db');
@@ -45,14 +46,14 @@ bot.onText(/\/start/, (msg, match) => {
     telegramId: msg.from.id,
     current_day: 0,
   }).then(() => {
-    steps[1](bot, chatId).run();
+    steps[4](bot, chatId).run();
   })
 });
 
-// bot.onText(/\/actions/, (msg, match) => {
-//     const chatId = msg.chat.id;
-//     actionsStep(bot, chatId);
-// })
+bot.onText(/\/actions/, (msg, match) => {
+    const chatId = msg.chat.id;
+    actionsStep(bot, chatId);
+});
 
 // Listen for any kind of message. There are different kinds of
 // messages.
