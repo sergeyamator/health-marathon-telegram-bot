@@ -5,6 +5,8 @@ const message = require("./messages");
 const showPurchases = require('./instructions/showPurchases');
 const userService = require('./services/userService');
 
+const { TIME_PERIOD } = require('./constants');
+
 const readFileAsync = utils.promisify(fs.readFile);
 
 module.exports = bot => {
@@ -31,13 +33,14 @@ module.exports = bot => {
         instructionsTextFilePath = "enterKastorka.md";
         break;
 
-      case message.days7button:
-      case message.days14button:
-        daysAmountCallback(data);
+      case TIME_PERIOD.long:
+      case TIME_PERIOD.short:
+        userService.setTimePeriod(id, Number(data));
         break;
 
       case message.conditionsButton:
         userService.saveAgreement(id);
+        userService.switchForNextDay(id);
         showPurchases(bot, id);
         break;
     }

@@ -1,10 +1,5 @@
 const User = require("../db/user");
 
-const TIME_PERIOD = {
-  short: 0,
-  long: 1
-};
-
 module.exports = {
   save(data) {
     return User.findOne({
@@ -16,11 +11,12 @@ module.exports = {
     }).catch(console.error);
   },
 
-  setTimePeriod(telegramId, days) {
+  setTimePeriod(telegramId, period) {
+    console.log(period)
     User.findOneAndUpdate(
       { telegramId },
-      { period: days }
-    ).catch(console.log);
+      { period: period }
+    ).then(console.log).catch(console.error);
   },
 
   saveAgreement(telegramId) {

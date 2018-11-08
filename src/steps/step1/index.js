@@ -37,7 +37,5 @@ module.exports = (bot, chatId) => ({
         ]
       }
     });
-
-    userService.switchForNextDay(chatId);
   }     
 })

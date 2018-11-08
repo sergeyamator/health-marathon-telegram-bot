@@ -16,7 +16,6 @@ const times = require('./src/services/time');
 const steps = [];
 let dayTimer = 0;
 
-      
 readDirAsync(path.join(__dirname, 'src', 'steps'))
   .then(files => {
     files.forEach(file => {
@@ -35,7 +34,7 @@ bot.onText(/\/start/, (msg, match) => {
   //   } else {
   //     clearInterval(intervalId);
   //   }
-  
+
   // }, 2000)
 
   userService.save({
@@ -46,7 +45,7 @@ bot.onText(/\/start/, (msg, match) => {
     telegramId: msg.from.id,
     current_day: 0,
   }).then(() => {
-    steps[0](bot, chatId).run();
+    steps[1](bot, chatId).run();
   })
 });
 
@@ -64,4 +63,4 @@ bot.onText(/\/start/, (msg, match) => {
 //   bot.sendMessage(chatId, 'Received your message');
 // });
 
-require('./src/callbackButtonActions')(bot)
+require('./src/callbackButtonActions')(bot);
