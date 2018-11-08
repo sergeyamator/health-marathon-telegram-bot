@@ -3,19 +3,27 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const userService = require('./src/services/userService');
+const dateService = require('./src/services/dateService');
 const actionsStep = require('./src/action/actions');
 
 require('dotenv').config();
 require('./src/db');
 
 const token = process.env.TELEGRAM_API_KEY;
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token, {polling: true});
 const readDirAsync = util.promisify(fs.readdir);
 const steps = [];
 
 readDirAsync(path.join(__dirname, 'src', 'steps'))
   .then(files => {
-    console.log(files);
+    files.sort((a, b) => {
+      const regExp = RegExp(/step(\d+)/);
+      const firstNumber = Number(a.match(regExp)[1]);
+      const secondNumber = Number(b.match(regExp)[1]);
+
+      return firstNumber > secondNumber ? 1 : -1;
+    });
+
     files.forEach(file => {
       steps.push(require(path.join(__dirname, 'src', 'steps', file)));
     });
@@ -24,17 +32,6 @@ readDirAsync(path.join(__dirname, 'src', 'steps'))
 
 bot.onText(/\/start/, (msg, match) => {
   const chatId = msg.chat.id;
-
-  // const intervalId = setInterval(() => {
-  //   if (dayTimer < steps.length) {
-  //     steps[dayTimer](bot, chatId).run();
-  //     dayTimer++
-  //   } else {
-  //     clearInterval(intervalId);
-  //   }
-
-  // }, 2000)
-
   userService.save({
     first_name: msg.from.first_name,
     last_name: msg.from.last_name,
@@ -43,13 +40,28 @@ bot.onText(/\/start/, (msg, match) => {
     telegramId: msg.from.id,
     current_day: 0,
   }).then(() => {
-    steps[4](bot, chatId).run();
+    steps[0](bot, chatId).run();
+
+    userService.getUser(chatId)
+      .then(user => {
+        if (!user.agreement) {
+          return;
+        }
+
+  /*      dateService.scheduleJobForEveryDay({
+          timeStart: new Date(2018, 11, 20, 8),
+          job: steps,
+          stop: 20,
+          bot,
+          chatId,
+        });*/
+      })
   })
 });
 
 bot.onText(/\/actions/, (msg, match) => {
-    const chatId = msg.chat.id;
-    actionsStep(bot, chatId);
+  const chatId = msg.chat.id;
+  actionsStep(bot, chatId);
 });
 
 // Listen for any kind of message. There are different kinds of

@@ -21,7 +21,7 @@ module.exports = (bot, chatId) => ({
     });
 
     try {
-      const herbalRecipeTextFile = await readFileAsync(path.join(__dirname, "herbalRecipe.md"));
+      const herbalRecipeTextFile = await readFileAsync(path.join(__dirname, "..", "..", "instructions", "herbalRecipe.md"));
       bot.sendMessage(chatId, herbalRecipeTextFile.toString(), {
         parse_mode: "Markdown"
       });

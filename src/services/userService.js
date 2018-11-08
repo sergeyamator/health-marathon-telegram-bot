@@ -11,6 +11,12 @@ module.exports = {
     }).catch(console.error);
   },
 
+  getUser(telegramId) {
+    return User.findOne({
+      telegramId
+    })
+  },
+
   setTimePeriod(telegramId, period) {
     console.log(period)
     User.findOneAndUpdate(

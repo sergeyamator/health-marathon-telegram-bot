@@ -26,6 +26,7 @@ module.exports = (bot, chatId) => ({
     });
 
     bot.sendMessage(chatId, message.conditions, {
+      parse_mode: "Markdown",
       reply_markup: {
         inline_keyboard: [
           [
@@ -36,6 +37,6 @@ module.exports = (bot, chatId) => ({
           ]
         ]
       }
-    });
+    }).catch(console.error);
   }
-})
+});
