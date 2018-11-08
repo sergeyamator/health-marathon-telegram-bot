@@ -1,16 +1,14 @@
-const message = require("../../messages.js");
 const fs = require('fs');
 const path = require('path');
 const utils = require('util');
 
-const userService = require('../../services/userService');
-
+const showDaysAmountActions = require('./daysAmountActions');
 const readFileAsync = utils.promisify(fs.readFile);
+
+let stepTextFile;
 
 module.exports = (bot, chatId) => ({
   async run() {
-    let stepTextFile;
-
     try {
       stepTextFile = await readFileAsync(path.join(__dirname, 'step.md'));
     } catch (e) {
@@ -25,17 +23,6 @@ module.exports = (bot, chatId) => ({
       parse_mode: "Markdown"
     });
 
-    bot.sendMessage(chatId, message.conditions, {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: message.conditionsButton,
-              callback_data: message.conditionsButton
-            },
-          ]
-        ]
-      }
-    });
+    showDaysAmountActions(bot, chatId);
   }
-})
+});

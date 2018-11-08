@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const utils = require("util");
+const message = require('../../messages');
 
 const readFileAsync = utils.promisify(fs.readFile);
 
@@ -14,8 +15,38 @@ module.exports = (bot, chatId) => ({
       console.error("Can not read file step.md", e);
     }
 
-    bot.sendMessage(chatId, stepTextFile.toString(), {
+    await bot.sendMessage(chatId, stepTextFile.toString(), {
       parse_mode: "Markdown"
+    });
+
+    await bot.sendMessage(chatId, message.enterOptionText, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: message.enterMagneziaButton,
+              callback_data: message.enterMagneziaButton
+            },
+            {
+              text: message.enterKastorkaButton,
+              callback_data: message.enterKastorkaButton
+            },
+          ]
+        ]
+      }
+    });
+
+    await bot.sendMessage(chatId, message.klizmaButton, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: message.klizmaButton,
+              callback_data: message.klizmaButton
+            },
+          ]
+        ]
+      }
     });
   }
 });

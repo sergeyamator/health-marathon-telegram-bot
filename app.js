@@ -11,14 +11,11 @@ require('./src/db');
 const token = process.env.TELEGRAM_API_KEY;
 const bot = new TelegramBot(token, { polling: true });
 const readDirAsync = util.promisify(fs.readdir);
-
-const times = require('./src/services/time');
-
 const steps = [];
-let dayTimer = 0;
 
 readDirAsync(path.join(__dirname, 'src', 'steps'))
   .then(files => {
+    console.log(files);
     files.forEach(file => {
       steps.push(require(path.join(__dirname, 'src', 'steps', file)));
     });

@@ -9,9 +9,7 @@ let stepTextFile;
 module.exports = (bot, chatId) => ({
   async run() {
     try {
-      stepTextFile = await readFileAsync(path.join(__dirname, "step.md"), {
-        parse_mode: "Markdown"
-      });
+      stepTextFile = await readFileAsync(path.join(__dirname, "step.md"));
     } catch (e) {
       console.error("Can not read file step.md", e);
     }
